@@ -1,0 +1,4 @@
+/app/config.php
+/app/private-files/*
+!/app/private-files/index.html
+*.zip
