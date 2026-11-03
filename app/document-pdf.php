@@ -74,8 +74,8 @@ function document_pdf(array $doc, int $paid=0, ?array $marks=null): string {
 
     // Logo left; payment status tag, title and number right.
     // Fit any client logo inside a 44 × 26 mm box above the company details.
-    [$lw,$lh]=getimagesize(__DIR__.'/images/logo.png'); $scale=min(44/$lw,26/$lh);
-    $pdf->Image(__DIR__.'/images/logo.png',15,13,$lw*$scale,$lh*$scale);
+    $logo=company_logo_path('document'); [$lw,$lh]=getimagesize($logo); $scale=min(44/$lw,26/$lh);
+    $pdf->Image($logo,15,13,$lw*$scale,$lh*$scale);
     if ($stamp=payment_stamp($doc,$paid)) {
         // The screen colours at 40% strength on white.
         $pdf->SetTextColor(...['paid'=>[161,199,181],'part'=>[225,186,157],'unpaid'=>[223,170,175]][$stamp[1]]);

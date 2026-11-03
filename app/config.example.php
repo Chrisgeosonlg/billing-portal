@@ -7,7 +7,7 @@ return [
     'setup_key' => 'REPLACE_WITH_A_RANDOM_SECRET_OF_AT_LEAST_32_CHARACTERS',
     'app_url' => 'https://billing.example.com',
     'mail_from' => 'office@example.com',
-    // Branding shown in the portal, customer emails and download pages. Replace images/logo.png, logo-light.png and logo-icon.png with the client's logos too.
+    // Branding shown in the portal, customer emails and download pages. Logos are uploaded under Company details (defaults are in images/).
     'brand' => 'Billing Portal',
     'short_name' => 'Billing',
     'location' => 'City, Country',

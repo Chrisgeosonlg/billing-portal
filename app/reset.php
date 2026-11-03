@@ -39,8 +39,8 @@ $valid = (bool)$record;
 // Users added by the administrator have no password yet: the same link lets them create one.
 $invited = $valid && $record['password_hash']==='';
 ?>
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title><?=$invited?'Create your password':'Password recovery'?> | <?=e(brand('short_name'))?> Portal</title><link rel="icon" href="images/logo-icon.png" type="image/png"><link rel="stylesheet" href="style.css?v=27"><script src="app.js?v=13" defer></script></head><body>
-<aside class="sidebar"><a class="brand" href="index.php"><img class="brand-logo" src="images/logo-light.png" alt="<?=e(brand('brand'))?>"><small>BILLING PORTAL</small></a></aside>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title><?=$invited?'Create your password':'Password recovery'?> | <?=e(brand('short_name'))?> Portal</title><link rel="icon" href="<?=company_logo_url('icon')?>" type="image/png"><link rel="stylesheet" href="style.css?v=28"><script src="app.js?v=13" defer></script></head><body>
+<aside class="sidebar"><a class="brand" href="index.php"><img class="brand-logo" src="<?=company_logo_url('sidebar')?>" alt="<?=e(brand('brand'))?>"><small>BILLING PORTAL</small></a></aside>
 <main><section class="card auth"><h1><?=$invited?'Create your password':($mode==='reset'?'Choose a new password':'Forgot password?')?></h1>
 <?php if ($error): ?><p class="alert" role="alert"><?=e($error)?></p><?php endif ?>
 <?php if ($notice): ?><p role="status"><?=e($notice)?></p><?php endif ?>

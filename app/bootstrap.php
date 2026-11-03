@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require __DIR__ . '/lib.php';
 require __DIR__ . '/users-lib.php';
+require_once __DIR__ . '/company-lib.php';
 date_default_timezone_set('Africa/Dar_es_Salaam');
 ini_set('display_errors', '0');
 ini_set('session.use_strict_mode', '1');

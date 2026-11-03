@@ -6,7 +6,7 @@ $qty=fn(int $v)=>rtrim(rtrim(money($v),'0'),'.');
 ?>
 <article class="card document paper">
 <header class="paper-head">
-<div class="paper-brand"><img class="document-logo" src="images/logo.png" alt="<?=e(brand('brand'))?>"><div class="paper-company"><strong class="paper-name"><?=e($company['company'])?></strong><p class="pre"><?=e($company['address'])?></p><p><?=e(trim($company['email'].' · '.$company['phone'],' ·'))?></p></div></div>
+<div class="paper-brand"><img class="document-logo" src="<?=company_logo_url('document')?>" alt="<?=e(brand('brand'))?>"><div class="paper-company"><strong class="paper-name"><?=e($company['company'])?></strong><p class="pre"><?=e($company['address'])?></p><p><?=e(trim($company['email'].' · '.$company['phone'],' ·'))?></p></div></div>
 <div class="paper-title"><?php if ($stamp=payment_stamp($doc,(int)$paid)): ?><span class="status-tag status-<?=$stamp[1]?>"><?=e($stamp[0])?></span><?php endif ?><h2><?=e(strtoupper(kind_name($doc['kind'])))?></h2><p class="paper-number">No. <?=e(number($doc))?></p><?php if ($sentInfo=last_sent([$doc['id']])[(int)$doc['id']]??null): ?><p class="sent-mark no-print <?=$sentInfo['mail_status']==='accepted'?'sent-ok':'sent-failed'?>"><?php if ($sentInfo['mail_status']==='accepted'): ?>✓ Sent to <?=e($sentInfo['recipient'])?><small><?=e($sentInfo['sent_at']->format('j M Y, H:i'))?><?=$sentInfo['times']>1?' · sent '.$sentInfo['times'].' times':''?></small><?php else: ?><?=$sentInfo['mail_status']==='failed'?'Not sent: the email to '.e($sentInfo['recipient']).' failed':'Email to '.e($sentInfo['recipient']).' not confirmed'?><small><?=e($sentInfo['sent_at']->format('j M Y, H:i'))?></small><?php endif ?></p><?php endif ?></div>
 </header>
 <div class="paper-info">

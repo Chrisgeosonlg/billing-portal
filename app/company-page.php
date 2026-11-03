@@ -13,3 +13,12 @@ $value=fn(string $key)=>($_POST['action']??'')==='company_save' ? (string)($_POS
 <label class="check"><input type="checkbox" name="apply_existing" value="1"> Also update the <?=$total?> Proforma<?=$total===1?'':'s'?> and Tax Invoice<?=$total===1?'':'s'?> already created</label>
 <p class="muted">Leave it unticked to keep earlier documents exactly as issued. PDFs already emailed to customers do not change either way.</p>
 <button>Save company details</button></form></section>
+<section class="card" id="logos"><h2>Logos</h2>
+<p class="muted">PNG or JPG, up to 2 MB. Until you upload your own, the default artwork is used.</p>
+<div class="logo-grid"><?php foreach (COMPANY_LOGOS as $which=>[$label,$default,$hint]): $own=company_logo_file($which); ?>
+<div class="logo-card"><h3><?=e($label)?></h3><p class="muted"><?=e($hint)?></p>
+<div class="logo-preview<?=$which==='sidebar'?' dark':''?>"><img src="<?=company_logo_url($which)?>" alt="<?=e($label)?>"></div>
+<p class="muted"><?=$own?'Your uploaded logo.':'Default artwork.'?></p>
+<form method="post" enctype="multipart/form-data"><?=csrf()?><input type="hidden" name="action" value="logo_upload"><input type="hidden" name="which" value="<?=$which?>"><label><?=$own?'Replace with a new image':'Upload your logo'?><input type="file" name="image" accept="image/png,image/jpeg,.png,.jpg,.jpeg" required></label><button><?=$own?'Replace':'Upload'?></button></form>
+<?php if ($own): ?><form method="post" data-confirm="Remove this logo and use the default artwork?"><?=csrf()?><input type="hidden" name="action" value="logo_remove"><input type="hidden" name="which" value="<?=$which?>"><button class="quiet">Use the default</button></form><?php endif ?>
+</div><?php endforeach ?></div></section>

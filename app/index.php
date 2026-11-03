@@ -72,6 +72,13 @@ try {
                 $_SESSION['notice']='Company details saved. New documents use them from now on.'.($updated!==null?' '.$updated.' existing document'.($updated===1?' was':'s were').' updated too.':'');
                 go('index.php?page=company');
             }
+            if ($action==='logo_upload' || $action==='logo_remove') {
+                if (!is_admin()) throw new RuntimeException('Only the administrator can change the logos.');
+                $which=field('which'); $label=COMPANY_LOGOS[$which][0]??'Logo';
+                if ($action==='logo_upload') { company_logo_save($which,$_FILES['image']??[]); $_SESSION['notice']=$label.' saved. It shows from now on, including on documents already created.'; activity('Uploaded a new '.strtolower($label)); }
+                else { company_logo_remove($which); $_SESSION['notice']=$label.' removed. The default artwork is used instead.'; activity('Removed the '.strtolower($label)); }
+                go('index.php?page=company#logos');
+            }
             if (in_array($action,['mark_upload','mark_remove','signatory_save'],true)) {
                 $type=field('type'); $label=MARK_TYPES[$type]??'';
                 if ($action==='mark_upload') { mark_save($type,$_FILES['image']??[]); $_SESSION['notice']=$label.' saved. Tick it on a document under Send to customer to add it to that PDF.'; activity('Uploaded the '.strtolower($label).' image'); }
@@ -354,8 +361,8 @@ if ($page === 'customers' && ($_GET['export'] ?? '') === 'csv' && !empty($_SESSI
 $titles = ['dashboard'=>'Overview','customers'=>'Customers','customer'=>'Customer','import'=>'Import customers','new'=>'Create document','documents'=>'Proformas & Tax Invoices','recurring'=>'Recurring services','reports'=>'Monthly report','marks'=>'Stamp & signature','view'=>'Document','account'=>'Your account','users'=>'Users & activity','company'=>'Company details','login'=>'Welcome back','setup'=>'Set up your portal'];
 if ($page === 'new' && isset($_GET['edit'])) $titles['new'] = 'Edit document';
 ?>
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title><?=e($titles[$page])?> | <?=e(brand('short_name'))?> Portal</title><link rel="icon" href="images/logo-icon.png" type="image/png"><link rel="stylesheet" href="style.css?v=27"><script src="app.js?v=13" defer></script></head><body>
-<aside class="sidebar"><a class="brand" href="index.php"><img class="brand-logo" src="images/logo-light.png" alt="<?=e(brand('brand'))?>"><small>STAFF PORTAL</small></a>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title><?=e($titles[$page])?> | <?=e(brand('short_name'))?> Portal</title><link rel="icon" href="<?=company_logo_url('icon')?>" type="image/png"><link rel="stylesheet" href="style.css?v=28"><script src="app.js?v=13" defer></script></head><body>
+<aside class="sidebar"><a class="brand" href="index.php"><img class="brand-logo" src="<?=company_logo_url('sidebar')?>" alt="<?=e(brand('brand'))?>"><small>STAFF PORTAL</small></a>
 <?php if (!empty($_SESSION['user_id'])): ?><nav><?php foreach (['dashboard'=>'Overview','customers'=>'Customers','documents'=>'Proformas & Tax Invoices','recurring'=>'Recurring','reports'=>'Reports','marks'=>'Stamp & signature','new'=>'Create document']+(is_admin()?['company'=>'Company details','users'=>'Users & activity']:[])+['account'=>'Your account'] as $key=>$label): ?><a class="<?=($page===$key || ($key==='customers' && $page==='customer'))?'active':''?>" href="index.php?page=<?=$key?>"><?=e($label)?></a><?php endforeach ?></nav><form method="post"><?=csrf()?><input type="hidden" name="action" value="logout"><button class="quiet">Sign out</button></form><?php endif ?><div class="sidebar-foot"><?=e(brand('company'))?><br><?=e(brand('location'))?></div></aside>
 <main><header class="top"><div><div class="eyebrow"><?=e(strtoupper(brand('short_name')))?> WORKSPACE</div><h1><?=e($titles[$page])?></h1></div><span class="today"><?=date('d M Y')?></span></header>
 <?php if ($error): ?><div role="alert" class="alert"><?=e($error)?></div><?php endif ?>
